@@ -19,33 +19,59 @@ n_UXmMKQCjPXIgLIMEENHbpXe1hvfYRs8W58nP_wlA2weHUE2rQyqEEAQ',
 BASE_PATH = 'https://public.api.aibo.com/v1'
 DEVICE_ID = "010ed9e5-bc49-40f7-9e42-e7e2d229e305"
 
-    
 def do_action():
+    
     while True:
         if keyboard.is_pressed("w"):
             print("move forward")
             api_name="move_forward"
             data = '{"arguments":' '{"WalkSpeed":1,"WalkDistance":0.5}''}'
-        elif keyboard.is_pressed("s"):
+
+            post_url = BASE_PATH + '/devices/' + DEVICE_ID + '/capabilities/'+ api_name + '/execute'
+            req = urllib.request.Request(post_url, data.encode(), headers=headers, method='POST')
+            
+            with urllib.request.urlopen(req) as res:
+                response = res.read()
+            post_result = json.loads(response)
+        if keyboard.is_pressed("s"):
             print("move backwards")
             api_name="move_forward"
             data = '{"arguments":' '{"WalkSpeed":1,"WalkDistance":-0.5}''}'
-        elif keyboard.is_pressed("a"):
+
+            post_url = BASE_PATH + '/devices/' + DEVICE_ID + '/capabilities/'+ api_name + '/execute'
+            req = urllib.request.Request(post_url, data.encode(), headers=headers, method='POST')
+            
+            with urllib.request.urlopen(req) as res:
+                response = res.read()
+            post_result = json.loads(response)
+        if keyboard.is_pressed("a"):
             print("move to left")
             api_name="move_sideways"
-            data = '{"arguments":' '{"WalkSpeed":1,"WalkDistance":0.5}''}'
-        elif keyboard.is_pressed("d"):
+            data = '{"arguments":' '{"WalkSpeed":2,"WalkDistance":0.5}''}'
+
+            post_url = BASE_PATH + '/devices/' + DEVICE_ID + '/capabilities/'+ api_name + '/execute'
+            req = urllib.request.Request(post_url, data.encode(), headers=headers, method='POST')
+            
+            with urllib.request.urlopen(req) as res:
+                response = res.read()
+            post_result = json.loads(response)
+        if keyboard.is_pressed("d"):
             print("move to right")
             api_name="move_sideways"
-            data = '{"arguments":' '{"WalkSpeed":1,"WalkDistance":-0.5}''}'
+            data = '{"arguments":' '{"WalkSpeed":2,"WalkDistance":-0.5}''}'
+            
+            post_url = BASE_PATH + '/devices/' + DEVICE_ID + '/capabilities/'+ api_name + '/execute'
+            req = urllib.request.Request(post_url, data.encode(), headers=headers, method='POST')
+            
+            with urllib.request.urlopen(req) as res:
+                response = res.read()
+            post_result = json.loads(response)
         
-        post_url = BASE_PATH + '/devices/' + DEVICE_ID + '/capabilities/'+ api_name + '/execute'
+    
 
+      
         # POST API
-        req = urllib.request.Request(post_url, data.encode(), headers=headers, method='POST')
-        with urllib.request.urlopen(req) as res:
-            response = res.read()
-        post_result = json.loads(response)
+     
 
         '''
         executionId = post_result["executionId"]
