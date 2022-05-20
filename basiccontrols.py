@@ -3,6 +3,7 @@ import sys
 import time
 import urllib.request
 import keyboard
+from tkinter import *
 
 headers = {
 'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjExMSJ9.eyJzdWIiOiJlN\
@@ -95,3 +96,14 @@ def do_action():
 if __name__ == '__main__':
         do_action()
         exit(1)
+
+
+root = Tk()
+
+myLabel1 = Label(root, text="Hello World!")
+myLabel2 = Label(root, text="My Name is Ian")
+
+myLabel1.grid(row=0, column=0)
+myLabel2.grid(row=1, column=0)
+
+root.mainloop()
