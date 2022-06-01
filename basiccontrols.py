@@ -20,7 +20,8 @@ n_UXmMKQCjPXIgLIMEENHbpXe1hvfYRs8W58nP_wlA2weHUE2rQyqEEAQ',
 }
 BASE_PATH = 'https://public.api.aibo.com/v1'
 DEVICE_ID = "010ed9e5-bc49-40f7-9e42-e7e2d229e305"
-    
+
+
 def move_forward():
     print("move forward")
     api_name="move_forward"
@@ -73,7 +74,7 @@ def turn_around_clock():
     print("turn around clockwise")
     api_name="turn_around"
 
-    data = '{"arguments":{"TurnSpeed":2,"TurnAngle":-180}}'
+    data = '{"arguments":{"TurnSpeed":2,"TurnAngle":-45}}'
     
     post_url = BASE_PATH + '/devices/' + DEVICE_ID + '/capabilities/'+ api_name + '/execute'
     req = urllib.request.Request(post_url, data.encode(), headers=headers, method='POST')
@@ -86,7 +87,7 @@ def turn_around_anticlock():
     print("turn around anticlockwise")
     api_name="turn_around"
 
-    data = '{"arguments":{"TurnSpeed":2,"TurnAngle":180}}'
+    data = '{"arguments":{"TurnSpeed":2,"TurnAngle":45}}'
     
     post_url = BASE_PATH + '/devices/' + DEVICE_ID + '/capabilities/'+ api_name + '/execute'
     req = urllib.request.Request(post_url, data.encode(), headers=headers, method='POST')
@@ -112,6 +113,13 @@ def do_action():
 
 root = Tk()
 root.title("Basic W,A,S,D Movements")
+
+root.bind('w', lambda event: move_forward())
+root.bind('s', lambda event: move_backwards())
+root.bind('a', lambda event: move_left())
+root.bind('d', lambda event: move_right())
+root.bind('l', lambda event: turn_around_clock())
+root.bind('j', lambda event: turn_around_anticlock())
 
 def button_move():
     return
