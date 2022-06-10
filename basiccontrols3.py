@@ -22,7 +22,6 @@ BASE_PATH = 'https://public.api.aibo.com/v1'
 DEVICE_ID = "010ed9e5-bc49-40f7-9e42-e7e2d229e305"
 TIME_OUT_LIMIT = 5
 
-
 def move_forward():
     print("move forward")
     api_name="move_forward"
@@ -97,41 +96,25 @@ def turn_around_anticlock():
         response = res.read()
     post_result = json.loads(response)
 
+data=''
 
-'''
-def do_action():
-    while True:
-        if keyboard.is_pressed("w"):
-            move_forward
-        if keyboard.is_pressed("s"):
-            move_backwards
-        if keyboard.is_pressed("a"):
-            move_left
-        if keyboard.is_pressed("d"):
-            move_right
-        if keyboard.is_pressed("l"):
-            turn_around_clock
-        if keyboard.is_pressed("j"):
-            turn_around_anticlock
-            '''
-
-data='{"arguments":{"ModeName":"DEVELOPMENT"}}'
 def convert():
     if(button_mode['state']==DISABLED):
         button_mode["state"] = NORMAL
         button_switch["text"]="OFF"
         data='{"arguments":{"ModeName":"DEVELOPMENT"}}'
-
+        return data
     elif (button_mode['state']==NORMAL):
         button_mode["state"]=DISABLED
         button_switch["text"]="ON"
         data='{"arguments":{"ModeName":"NORMAL"}}'
+        return data
 
-def set_mode(data):
+def set_mode():
     print("Setting mode...")
 
     post_url = BASE_PATH + '/devices/' + DEVICE_ID + '/capabilities/set_mode' + '/execute '
-    req = urllib.request.Request(post_url, data.encode(),headers=headers, method='POST')
+    req = urllib.request.Request(post_url, convert().encode(),headers=headers, method='POST')
 
     with urllib.request.urlopen(req) as res:
         response = res.read()
@@ -188,8 +171,7 @@ button_switch = Button(root, text="Mode", padx=10, pady=10)
 button_mode=Button(root,text="Developer Mode",state=DISABLED)
 button_mode.config(height=1,width=10)
 #switch button
-button_switch = Button(root, text="On", padx=10, pady=10, command=lambda:[convert(),set_mode(data)])
-
+button_switch = Button(root, text="On", padx=10, pady=10, command=set_mode)
 
 #Position of buttons
 button_w.grid(row=1, column=2)
