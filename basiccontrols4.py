@@ -96,6 +96,32 @@ def turn_around_anticlock():
         response = res.read()
     post_result = json.loads(response)
 
+def bark():
+    print("bark")
+    api_name="bark"
+
+    data = '{"arguments":{"Category":"bark","Mode":"NONE"}}'
+
+    post_url = BASE_PATH + '/devices/' + DEVICE_ID + '/capabilities/'+ api_name + '/execute'
+    req = urllib.request.Request(post_url, data.encode(), headers=headers, method='POST')
+    
+    with urllib.request.urlopen(req) as res:
+        response = res.read()
+    post_result = json.loads(response)
+
+def pee():
+    print("bark")
+    api_name="bark"
+
+    data = '{"arguments":{"Category":"bark","Mode":"NONE"}}'
+
+    post_url = BASE_PATH + '/devices/' + DEVICE_ID + '/capabilities/'+ api_name + '/execute'
+    req = urllib.request.Request(post_url, data.encode(), headers=headers, method='POST')
+    
+    with urllib.request.urlopen(req) as res:
+        response = res.read()
+    post_result = json.loads(response)
+
 data=''
 
 def convert():
@@ -154,6 +180,8 @@ root.bind('a', lambda event: move_left())
 root.bind('d', lambda event: move_right())
 root.bind('e', lambda event: turn_around_clock())
 root.bind('q', lambda event: turn_around_anticlock())
+root.bind('b', lambda event: bark())
+root.bind('p', lambda event: pee())
 
 #??? what is this
 def button_move():
@@ -166,6 +194,8 @@ button_a = Button(root, text="A", padx=30, pady=20, command=move_left)
 button_d = Button(root, text="D", padx=30, pady=20, command=move_right)
 button_e = Button(root, text="↩️", padx=30, pady=20, command=turn_around_clock)
 button_q = Button(root, text="↪️", padx=30, pady=20, command=turn_around_anticlock)
+button_b = Button(root, text="Bark", padx=30, pady=20, command=bark)
+button_p = Button(root, text="Pee", padx=30, pady=20, command=pee)
 button_switch = Button(root, text="Mode", padx=10, pady=10)
 #mode display
 button_mode=Button(root,text="Developer Mode",state=DISABLED)
@@ -182,6 +212,8 @@ button_q.grid(row=1, column=1)
 button_e.grid(row=1, column=3)
 button_mode.grid(row=3,column=1)
 button_switch.grid(row=3,column=2)
+button_b.grid(row=2, column=4)
+button_p.grid(row=1, column=4)
 
 root.mainloop()  
 
