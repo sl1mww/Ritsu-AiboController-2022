@@ -98,7 +98,7 @@ def turn_around_anticlock():
 
 def bark():
     print("bark")
-    api_name="bark"
+    api_name="play_motion"
 
     data = '{"arguments":{"Category":"bark","Mode":"NONE"}}'
 
@@ -111,9 +111,9 @@ def bark():
 
 def pee():
     print("pee")
-    api_name="marking"
+    api_name="play_motion"
 
-    data = '{"arguments":{"Category":"bark","Mode":"GIRL"}}'
+    data = '{"arguments":{"Category":"marking","Mode":"GIRL"}}'
 
     post_url = BASE_PATH + '/devices/' + DEVICE_ID + '/capabilities/'+ api_name + '/execute'
     req = urllib.request.Request(post_url, data.encode(), headers=headers, method='POST')
