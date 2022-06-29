@@ -165,17 +165,13 @@ def set_mode():
 
         time.sleep(1)
 
+
+def print_status():
+    txt.insert(0.5,status)
+
 root =Tk()
 root.title("Aibo controller")
 root.geometry("1000x1000")
-
-#turn round text
-f = Font(family='Helvetica', size=12)
-v1 = StringVar()
-txt = Text(root, height=0.5, width=10)
-txt.configure(font=f)
-txt.insert(0.5,"Turn around")
-txt.grid(row=2, column=5)
 
 #virtual control buttons
 button_w = Button(root, text="W", padx=30, pady=20, command=move_forward)
@@ -203,17 +199,23 @@ root.bind('p', lambda event: pee())
 scale.bind("<ButtonRelease-1>",lambda event: turn_around())
 
 #Position of buttons
-button_w.grid(row=1, column=2)
-button_s.grid(row=2, column=2)
-button_a.grid(row=2, column=1)
-button_d.grid(row=2, column=3)
-button_mode.grid(row=3,column=1)
-button_switch.grid(row=3,column=2)
-button_b.grid(row=2, column=4)
-button_p.grid(row=1, column=4)
-scale.grid(row=1,column=5)
+button_w.grid(row=2, column=2)
+button_s.grid(row=3, column=2)
+button_a.grid(row=3, column=1)
+button_d.grid(row=3, column=3)
+button_mode.grid(row=4,column=1)
+button_switch.grid(row=4,column=2)
+button_b.grid(row=3, column=4)
+button_p.grid(row=2, column=4)
+scale.grid(row=3,column=5)
 
-
+#turn round text
+f = Font(family='Helvetica', size=12)
+v1 = StringVar()
+txt = Text(root, height=0.5, width=10)
+txt.configure(font=f)
+txt.insert(0.5,"Turn around")
+txt.grid(row=4, column=5)
 
 root.mainloop()  
 
