@@ -222,7 +222,6 @@ def _monitor_controller():
             elif event.code == 'BTN_TRIGGER_HAPPY4':
                 self.DownDPad = event.state
 
-def controlmovement():
     
 
 
@@ -269,7 +268,6 @@ scale.grid(row=1,column=5)
 root.mainloop()  
 
 if __name__ == '__main__':
-    joy = XboxController()
     exit(1)   
  
     
