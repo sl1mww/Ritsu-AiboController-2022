@@ -103,14 +103,11 @@ class XboxController(object):
                     self.UpDPad = event.state
                 elif event.code == 'BTN_TRIGGER_HAPPY4':
                     self.DownDPad = event.state
+            if event.code == 'ABS_Y':
+                if self.LeftJoystickY > 0:
+                    bark()        
 
-    def run(self):
-        while True:
-            events = get_gamepad()
-            for event in events:
-                if event.code == 'ABS_Y':
-                    if self.LeftJoystickY > 0:
-                        bark()
+            
 
 
 
@@ -265,8 +262,7 @@ def set_mode():
 
 def set_controller():
     print("Controller mode enabled")
-    joy = XboxController()
-    joy.run()  
+    joy = XboxController()  
 
 root =Tk()
 root.title("Basic W,A,S,D Movements")
