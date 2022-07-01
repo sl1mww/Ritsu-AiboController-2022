@@ -31,14 +31,6 @@ class XboxController(object):
         self._monitor_thread = threading.Thread(target=self._monitor_controller, args=())
         self._monitor_thread.daemon = True
         self._monitor_thread.start()
-
-    def read(self): # return the buttons/triggers that you care about in this methode
-        x = self.LeftJoystickX
-        y = self.LeftJoystickY
-        a = self.A
-        b = self.X # b=1, x=2
-        rb = self.RightBumper
-        return [x, y, a, b, rb]
     
     def _monitor_controller(self):
         while True:

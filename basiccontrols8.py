@@ -28,6 +28,9 @@ BASE_PATH = 'https://public.api.aibo.com/v1'
 DEVICE_ID = "010ed9e5-bc49-40f7-9e42-e7e2d229e305"
 TIME_OUT_LIMIT = 5
 
+
+
+
 def move_forward():
     print("move forward")
     api_name="move_forward"
@@ -171,8 +174,50 @@ def set_mode():
 
 root =Tk()
 root.title("Basic W,A,S,D Movements")
+      
 
-#controller
+
+#keyboards
+root.bind('w', lambda event: move_forward())
+root.bind('s', lambda event: move_backwards())
+root.bind('a', lambda event: move_left())
+root.bind('d', lambda event: move_right())
+root.bind('e', lambda event: turn_around())
+root.bind('b', lambda event: bark())
+root.bind('p', lambda event: pee())
+
+#slider 
+scale=Scale(root,from_=-180,to=180,orient="vertical")
+angle=scale.get()
+
+#virtual control buttons
+button_w = Button(root, text="W", padx=30, pady=20, command=move_forward)
+button_s = Button(root, text="S", padx=30, pady=20, command=move_backwards)
+button_a = Button(root, text="A", padx=30, pady=20, command=move_left)
+button_d = Button(root, text="D", padx=30, pady=20, command=move_right)
+button_e = Button(root, text=" ↪️ ", padx=30, pady=20, command=turn_around,width=1,height=1)
+button_b = Button(root, text="Bark", padx=30, pady=20, command=bark,width=1,height=1)
+button_p = Button(root, text="Pee", padx=30, pady=20, command=pee,width=1,height=1)
+button_switch = Button(root, text="Mode", padx=10, pady=10)
+#mode display
+button_mode=Button(root,text="Developer Mode",state=DISABLED)
+button_mode.config(height=1,width=10)
+#switch button
+button_switch = Button(root, text="On", padx=10, pady=10, command=set_mode)
+
+#Position of buttons
+button_w.grid(row=1, column=2)
+button_s.grid(row=2, column=2)
+button_a.grid(row=2, column=1)
+button_d.grid(row=2, column=3)
+button_e.grid(row=1, column=3)
+button_mode.grid(row=3,column=1)
+button_switch.grid(row=3,column=2)
+button_b.grid(row=2, column=4)
+button_p.grid(row=1, column=4)
+scale.grid(row=1,column=5)
+
+root.mainloop() 
 
 class XboxController(object):
     MAX_TRIG_VAL = math.pow(2, 8)
@@ -204,16 +249,6 @@ class XboxController(object):
         self._monitor_thread = threading.Thread(target=self._monitor_controller, args=())
         self._monitor_thread.daemon = True
         self._monitor_thread.start()
-
-    
-    def read(self): # return the buttons/triggers that you care about in this methode
-        x = self.LeftJoystickX
-        y = self.LeftJoystickY
-        a = self.A
-        b = self.X # b=1, x=2
-        rb = self.RightBumper
-        return [x, y, a, b, rb]
-    
 
     def _monitor_controller(self):
         while True:
@@ -260,58 +295,20 @@ class XboxController(object):
                 elif event.code == 'BTN_TRIGGER_HAPPY4':
                     self.DownDPad = event.state
 
-    def controller_movement(self):
-        if 'BTN_SOUTH':
-            bark()
-            
+    def run(self):
+        while True:
+            events = get_gamepad()
+            for event in events:
+                if event.code == 'ABS_Y':
+                    if self.LeftJoystickY > 0:
+                        bark()
 
-
-#keyboards
-root.bind('w', lambda event: move_forward())
-root.bind('s', lambda event: move_backwards())
-root.bind('a', lambda event: move_left())
-root.bind('d', lambda event: move_right())
-root.bind('e', lambda event: turn_around())
-root.bind('b', lambda event: bark())
-root.bind('p', lambda event: pee())
-
-#slider 
-scale=Scale(root,from_=-180,to=180,orient="vertical")
-angle=scale.get()
-
-#virtual control buttons
-button_w = Button(root, text="W", padx=30, pady=20, command=move_forward)
-button_s = Button(root, text="S", padx=30, pady=20, command=move_backwards)
-button_a = Button(root, text="A", padx=30, pady=20, command=move_left)
-button_d = Button(root, text="D", padx=30, pady=20, command=move_right)
-button_e = Button(root, text=" ↪️ ", padx=30, pady=20, command=turn_around,width=1,height=1)
-button_b = Button(root, text="Bark", padx=30, pady=20, command=bark,width=1,height=1)
-button_p = Button(root, text="Pee", padx=30, pady=20, command=pee,width=1,height=1)
-button_switch = Button(root, text="Mode", padx=10, pady=10)
-#mode display
-button_mode=Button(root,text="Developer Mode",state=DISABLED)
-button_mode.config(height=1,width=10)
-#switch button
-button_switch = Button(root, text="On", padx=10, pady=10, command=set_mode)
-
-#Position of buttons
-button_w.grid(row=1, column=2)
-button_s.grid(row=2, column=2)
-button_a.grid(row=2, column=1)
-button_d.grid(row=2, column=3)
-button_e.grid(row=1, column=3)
-button_mode.grid(row=3,column=1)
-button_switch.grid(row=3,column=2)
-button_b.grid(row=2, column=4)
-button_p.grid(row=1, column=4)
-scale.grid(row=1,column=5)
-
-root.mainloop()  
 
 if __name__ == '__main__':
-    joy = XboxController()
-    while True:
-        print(joy.read())
-    exit(1)   
+    joy = XboxController() 
+    joy.run()  
+    
+    
+      
  
     
