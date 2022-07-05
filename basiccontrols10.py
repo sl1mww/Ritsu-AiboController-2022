@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import json
 import sys
 import time
@@ -7,6 +5,7 @@ import urllib.request
 import keyboard
 from curses import BUTTON2_CLICKED
 from tkinter import *
+from tkinter.font import Font
 from inputs import get_gamepad
 import math
 import threading
@@ -31,7 +30,6 @@ class XboxController(object):
     MAX_JOY_VAL = math.pow(2, 15)
 
     def __init__(self):
-
         self.LeftJoystickY = 0
         self.LeftJoystickX = 0
         self.RightJoystickY = 0
@@ -105,7 +103,6 @@ class XboxController(object):
                 if self.LeftJoystickY > 0:
                     bark()        
 
-
 def move_forward():
     print("move forward")
     api_name="move_forward"
@@ -155,17 +152,19 @@ def move_right():
     post_result = json.loads(response)
 
 def turn_around():
-    angle=scale.get()
+    angle=scale.get() #get most recent angle
+
+    if angle==0:
+        angle=180
 
     if angle>=0:
-        print("turn around anticlockwise")
+        print("turn around anticlockwise: "+str(angle)+"°")
     else:
-        print("turn around clockwise")
+        print("turn around clockwise: "+str(angle)+"°")
 
     api_name="turn_around"
 
     data = '{"arguments":{"TurnSpeed":2,"TurnAngle":' + str(angle)+'}}'
-    print(data)
     
     post_url = BASE_PATH + '/devices/' + DEVICE_ID + '/capabilities/'+ api_name + '/execute'
     req = urllib.request.Request(post_url, data.encode(), headers=headers, method='POST')
@@ -252,42 +251,32 @@ def convert2():
         button_controller["state"] = NORMAL
         button_switch2["text"]="OFF"
         print("Controller mode enabled")
-        joy = XboxController()  
+        set_controller(1)
     elif (button_controller['state']==NORMAL):
         button_controller["state"]=DISABLED
         button_switch2["text"]="ON"
         print("Controller mode disabled")
+        set_controller(0)
+
+def set_controller(state):
+    if state==1:
+        joy = XboxController() 
+    elif state==0:
         del joy
 
-'''def set_controller():
-    print("Controller mode enabled")
-    joy = XboxController()  
-'''
 
 root =Tk()
-root.title("Basic W,A,S,D Movements")
-
-#keyboards
-root.bind('w', lambda event: move_forward())
-root.bind('s', lambda event: move_backwards())
-root.bind('a', lambda event: move_left())
-root.bind('d', lambda event: move_right())
-root.bind('e', lambda event: turn_around())
-root.bind('b', lambda event: bark())
-root.bind('p', lambda event: pee())
-
-#slider 
-scale=Scale(root,from_=-180,to=180,orient="vertical")
-angle=scale.get()
+root.title("Aibo controller")
+root.geometry("1000x1000")
 
 #virtual control buttons
 button_w = Button(root, text="W", padx=30, pady=20, command=move_forward)
 button_s = Button(root, text="S", padx=30, pady=20, command=move_backwards)
 button_a = Button(root, text="A", padx=30, pady=20, command=move_left)
 button_d = Button(root, text="D", padx=30, pady=20, command=move_right)
-button_e = Button(root, text=" ↪️ ", padx=30, pady=20, command=turn_around,width=1,height=1)
 button_b = Button(root, text="Bark", padx=30, pady=20, command=bark,width=1,height=1)
 button_p = Button(root, text="Pee", padx=30, pady=20, command=pee,width=1,height=1)
+button_switch = Button(root, text="Mode", padx=10, pady=10)
 #mode display
 button_mode=Button(root,text="Developer Mode",state=DISABLED)
 button_mode.config(height=1,width=10)
@@ -298,21 +287,40 @@ button_switch = Button(root, text="On", padx=10, pady=10, command=set_mode)
 #button_switch2 = Button(root, text="On", padx=10, pady=10, command=lambda:[set_controller(), convert2()])
 button_switch2 = Button(root, text="On", padx=10, pady=10, command= convert2)
 
-#Position of buttons
-button_w.grid(row=1, column=2)
-button_s.grid(row=2, column=2)
-button_a.grid(row=2, column=1)
-button_d.grid(row=2, column=3)
-button_e.grid(row=1, column=3)
-button_mode.grid(row=3,column=1)
-button_switch.grid(row=3,column=2)
-button_controller.grid(row=3,column=3)
-button_switch2.grid(row=3,column=4)
-button_b.grid(row=2, column=4)
-button_p.grid(row=1, column=4)
-scale.grid(row=1,column=5)
+#slider 
+scale=Scale(root,from_=-180,to=180,orient="vertical")
 
-root.mainloop() 
+#keyboards
+root.bind('w', lambda event: move_forward())
+root.bind('s', lambda event: move_backwards())
+root.bind('a', lambda event: move_left())
+root.bind('d', lambda event: move_right())
+root.bind('b', lambda event: bark())
+root.bind('p', lambda event: pee())
+scale.bind("<ButtonRelease-1>",lambda event: turn_around())
+
+#Position of buttons
+button_w.grid(row=2, column=2)
+button_s.grid(row=3, column=2)
+button_a.grid(row=3, column=1)
+button_d.grid(row=3, column=3)
+button_mode.grid(row=4,column=1)
+button_switch.grid(row=4,column=2)
+button_controller.grid(row=4,column=3)
+button_switch2.grid(row=4,column=4)
+button_b.grid(row=3, column=4)
+button_p.grid(row=2, column=4)
+scale.grid(row=3,column=5)
+
+#turn round text
+f = Font(family='Helvetica', size=12)
+v1 = StringVar()
+txt = Text(root, height=0.5, width=10)
+txt.configure(font=f)
+txt.insert(0.5,"Turn around")
+txt.grid(row=4, column=5)
+
+root.mainloop()  
 
 if __name__ == '__main__':
-    exit(1)
+    exit(1)     
