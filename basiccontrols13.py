@@ -125,13 +125,12 @@ class XboxController(object):
             if event.code == 'BTN_NORTH':
                 if self.Y == 1:
                     pee()
-            if event.code == 'BTN_SELECT':
-                if self.Back == 1:
-                    set_mode()
             if event.code == 'BTN_START':
                 if self.Start == 1:
+                    set_mode()
+            if event.code == 'BTN_SELECT':
+                if self.Back == 1:
                     convert2()
-                    set_controller(0)
 
 def turn_around2(x,y): #for 0-90
     
@@ -330,6 +329,7 @@ def convert2():
 def set_controller(state):
     global dead
     if state==1: #controller on
+        
         joy = XboxController()
 
         #disabling all gui buttons
@@ -341,7 +341,7 @@ def set_controller(state):
         root.unbind('s')
         root.unbind('a')
         root.unbind('d')
-        root.unbind('b')s
+        root.unbind('b')
         root.unbind('p')
         scale.unbind("<ButtonRelease-1>")
           

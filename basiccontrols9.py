@@ -105,7 +105,10 @@ class XboxController(object):
                     self.DownDPad = event.state
             if event.code == 'ABS_Y':
                 if self.LeftJoystickY > 0:
-                    bark()        
+                    move_forward()   
+                if self.LeftJoystickY < 0:
+                    move_backwards()
+            if event.code == ''
 
             
 

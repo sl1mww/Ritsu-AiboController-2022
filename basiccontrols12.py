@@ -125,11 +125,11 @@ class XboxController(object):
             if event.code == 'BTN_NORTH':
                 if self.Y == 1:
                     pee()
+            if event.code == 'BTN_START':
+                if self.START == 1:
+                    set_mode()
             if event.code == 'BTN_SELECT':
                 if self.Back == 1:
-                    set_mode()
-            if event.code == 'BTN_START':
-                if self.Start == 1:
                     convert2()
                     set_controller(0)
 
