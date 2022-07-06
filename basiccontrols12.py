@@ -105,8 +105,72 @@ class XboxController(object):
                 elif event.code == 'BTN_TRIGGER_HAPPY4':
                     self.DownDPad = event.state
             if event.code == 'ABS_Y':
-                if self.LeftJoystickY > 0:
+                if self.LeftJoystickY > 0.5:
+                    move_forward()
+                elif self.LeftJoystickY < -0.5:
+                    move_backwards()
+            if event.code == 'ABS_X':
+                if self.LeftJoystickX > 0.5:
+                    move_right()
+                elif self.LeftJoystickX < -0.5:
+                    move_left()
+            if event.code == 'ABS_RX' and 'ABS_RY':
+                if self.RightJoystickX > 0 and self.RightJoystickY > 0 : #for 0-90
+                    turn_around2(self.RightJoystickX,self.RightJoystickY)
+                if self.RightJoystickX > 0 and self.RightJoystickY < 0 :
+                    turn_around3(self.RightJoystickX,self.RightJoystickY)
+            if event.code == 'BTN_EAST':
+                if self.B == 1:
                     bark()
+            if event.code == 'BTN_NORTH':
+                if self.Y == 1:
+                    pee()
+            if event.code == 'BTN_SELECT':
+                if self.Back == 1:
+                    set_mode()
+            if event.code == 'BTN_START':
+                if self.Start == 1:
+                    convert2()
+                    set_controller(0)
+
+def turn_around2(x,y): #for 0-90
+    
+    angle = math.degrees(math.atan(x/y))
+    angle = round(angle)
+    
+    print("turn around anticlockwise: "+str(angle)+"°")
+    
+    api_name="turn_around"
+
+    data = '{"arguments":{"TurnSpeed":2,"TurnAngle":' + str(angle)+'}}'
+    
+    post_url = BASE_PATH + '/devices/' + DEVICE_ID + '/capabilities/'+ api_name + '/execute'
+    req = urllib.request.Request(post_url, data.encode(), headers=headers, method='POST')
+    
+    with urllib.request.urlopen(req) as res:
+        response = res.read()
+    post_result = json.loads(response)      
+
+def turn_around3(x,y): #for 90-180
+    y = abs(y)
+    angle = math.degrees(math.atan(y/x))
+    angle = 90+round(angle)
+
+    print("turn around anticlockwise: "+str(angle)+"°")
+    
+    api_name="turn_around"
+
+    data = '{"arguments":{"TurnSpeed":2,"TurnAngle":' + str(angle)+'}}'
+    
+    post_url = BASE_PATH + '/devices/' + DEVICE_ID + '/capabilities/'+ api_name + '/execute'
+    req = urllib.request.Request(post_url, data.encode(), headers=headers, method='POST')
+    
+    with urllib.request.urlopen(req) as res:
+        response = res.read()
+    post_result = json.loads(response)      
+
+    
+            
 
 def move_forward():
     print("move forward")
@@ -265,7 +329,7 @@ def convert2():
 
 def set_controller(state):
     global dead
-    if state==1:
+    if state==1: #controller on
         joy = XboxController()
 
         #disabling all gui buttons
@@ -281,8 +345,8 @@ def set_controller(state):
         root.unbind('p')
         scale.unbind("<ButtonRelease-1>")
           
-    elif state==0:
-        dead=True
+    elif state==0: #controller off
+        dead=True 
 
         #enabling all gui buttons
         for x in (button_w, button_s, button_a,button_d,button_b,button_p,button_mode):
@@ -356,4 +420,4 @@ txt.grid(row=4, column=5)
 root.mainloop()  
 
 if __name__ == '__main__':
-    exit(1)     
+    exit(0)     
