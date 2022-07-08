@@ -48,10 +48,8 @@ class XboxController(object):
         self.RightThumb = 0
         self.Back = 0
         self.Start = 0
-        self.LeftDPad = 0
-        self.RightDPad = 0
-        self.UpDPad = 0
-        self.DownDPad = 0
+        self.DPadX = 0
+        self.DPadY = 0
 
         global dead 
         dead=False
@@ -96,14 +94,10 @@ class XboxController(object):
                     self.Back = event.state
                 elif event.code == 'BTN_START':
                     self.Start = event.state
-                elif event.code == 'BTN_TRIGGER_HAPPY1':
-                    self.LeftDPad = event.state
-                elif event.code == 'BTN_TRIGGER_HAPPY2':
-                    self.RightDPad = event.state
-                elif event.code == 'BTN_TRIGGER_HAPPY3':
-                    self.UpDPad = event.state
-                elif event.code == 'BTN_TRIGGER_HAPPY4':
-                    self.DownDPad = event.state
+                elif event.code == 'ABS_0X':
+                    self.DPadX = event.state
+                elif event.code == 'ABS_HAT0Y':
+                    self.DPadY = event.state
             if event.code == 'ABS_Y':
                 if self.LeftJoystickY > 0.5:
                     move_forward()
@@ -123,23 +117,22 @@ class XboxController(object):
                     turn_around4(self.RightJoystickX,self.RightJoystickY)
                 if self.RightJoystickX < 0 and self.RightJoystickY < 0 : #for 90-180
                     turn_around5(self.RightJoystickX,self.RightJoystickY) 
-            if event.code == 'BTN_TRIGGER_HAPPY3':
-                if self.UpDPad == 1:
+            if event.code == 'ABS_HAT0Y':
+                if self.DPadY == -1:
                     look_up()
-            if event.code == 'BTN_TRIGGER_HAPPY4':
-                if self.DownDPad == 1:
+                elif self.DPadY == 1:
                     look_down()
             if event.code == 'BTN_EAST':
-                if self.B == 1:
+                if self.B:
                     bark()
             if event.code == 'BTN_NORTH':
-                if self.Y == 1:
+                if self.Y:
                     pee()
             if event.code == 'BTN_START':
-                if self.Start == 1:
+                if self.Start:
                     set_mode()
             if event.code == 'BTN_SELECT':
-                if self.Back == 1:
+                if self.Back:
                     convert2()
 
 def turn_around2(x,y): #for 0-90
