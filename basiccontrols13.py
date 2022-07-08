@@ -420,8 +420,8 @@ root.bind('a', lambda event: move_left())
 root.bind('d', lambda event: move_right())
 root.bind('b', lambda event: bark())
 root.bind('p', lambda event: pee())
-root.bind('o', lambda event: look_up())
-root.bind('down', lambda event: look_down())
+root.bind('<Up>', lambda event: look_up())
+root.bind('<Down>', lambda event: look_down())
 scale.bind("<ButtonRelease-1>",lambda event: turn_around())
 
 #Position of buttons
