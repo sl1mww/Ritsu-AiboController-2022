@@ -1,15 +1,15 @@
 import json
-import sys
 import time
 from typing import DefaultDict
 import urllib.request
-import keyboard
 from curses import BUTTON2_CLICKED
 from tkinter import *
 from tkinter.font import Font
 from inputs import get_gamepad
 import math
 import threading
+
+#head turning (azimuth and elevation), mapping extra features, parameterising walking 
 
 headers = {
 'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjExMSJ9.eyJzdWIiOiJlN\
