@@ -267,6 +267,30 @@ def pee():
         response = res.read()
     post_result = json.loads(response)
 
+def look_up():
+    print("look up")
+    api_name="move_head"
+    data = '{"arguments":' '{"Azimuth":0,"Elevation":40, "Velocity":50}''}'
+    
+    post_url = BASE_PATH + '/devices/' + DEVICE_ID + '/capabilities/'+ api_name + '/execute'
+    req = urllib.request.Request(post_url, data.encode(), headers=headers, method='POST')
+    
+    with urllib.request.urlopen(req) as res:
+        response = res.read()
+    post_result = json.loads(response)
+
+def look_down():
+    print("look down")
+    api_name="move_head"
+    data = '{"arguments":' '{"Azimuth":0,"Elevation":-40, "Velocity":50}''}'
+    
+    post_url = BASE_PATH + '/devices/' + DEVICE_ID + '/capabilities/'+ api_name + '/execute'
+    req = urllib.request.Request(post_url, data.encode(), headers=headers, method='POST')
+    
+    with urllib.request.urlopen(req) as res:
+        response = res.read()
+    post_result = json.loads(response)
+
 data=''
 def convert():
     if(button_mode['state']==DISABLED):
@@ -373,6 +397,8 @@ button_a = Button(root, text="A", padx=30, pady=20, command=move_left)
 button_d = Button(root, text="D", padx=30, pady=20, command=move_right)
 button_b = Button(root, text="Bark", padx=30, pady=20, command=bark,width=1,height=1)
 button_p = Button(root, text="Pee", padx=30, pady=20, command=pee,width=1,height=1)
+button_up = Button(root, text="Look ⬆️", padx=30, pady=20, command=look_up,width=1,height=1)
+button_down = Button(root, text="Look ⬇️", padx=30, pady=20, command=look_down, width=1,height=1)
 button_switch = Button(root, text="Mode", padx=10, pady=10)
 #mode display
 button_mode=Button(root,text="Developer Mode",state=DISABLED)
@@ -394,6 +420,8 @@ root.bind('a', lambda event: move_left())
 root.bind('d', lambda event: move_right())
 root.bind('b', lambda event: bark())
 root.bind('p', lambda event: pee())
+root.bind('o', lambda event: look_up())
+root.bind('down', lambda event: look_down())
 scale.bind("<ButtonRelease-1>",lambda event: turn_around())
 
 #Position of buttons
@@ -407,6 +435,8 @@ button_controller.grid(row=4,column=3)
 button_switch2.grid(row=4,column=4)
 button_b.grid(row=3, column=4)
 button_p.grid(row=2, column=4)
+button_up.grid(row=2, column=6)
+button_down.grid(row=3, column=6)
 scale.grid(row=3,column=5)
 
 #turn round text
