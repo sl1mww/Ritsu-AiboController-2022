@@ -391,7 +391,7 @@ def set_controller(state):
         joy = XboxController()
 
         #disabling all gui buttons
-        for x in (button_w, button_s, button_a,button_d,button_b,button_p,button_mode,scale):
+        for x in (button_w, button_s, button_a,button_d,button_b,button_p,button_mode,scale,button_up,button_down):
             x.config(state = 'disabled')
 
         #disabling the keyboard
@@ -420,7 +420,7 @@ def set_controller(state):
         root.bind('b', lambda event: bark())
         root.bind('p', lambda event: pee())
         root.bind('<Up>', lambda event: look_up())
-        root.bind('<Down>', lambda event: look_down())
+        root.bind('<Down>', lambda event: look_down()) 
         scale.bind("<ButtonRelease-1>",lambda event: turn_around())
 
 root =Tk()
