@@ -28,7 +28,7 @@ TIME_OUT_LIMIT = 5
 
 root =Tk()
 root.title("Aibo controller")
-root.geometry("600x300")
+root.geometry("800x300")
 latestcommand = StringVar()
 
 class XboxController(object):
@@ -127,6 +127,11 @@ class XboxController(object):
                     look_up()
                 elif self.DPadY == 1:
                     look_down()
+            if event.code == 'ABS_HAT0X':
+                if self.DPadX == 1:
+                    look_right()
+                elif self.DPadX == -1:
+                    look_left()
             if event.code == 'BTN_EAST':
                 if self.B:
                     bark()
@@ -157,7 +162,8 @@ def turn_around2(x,y): #for 0-90
     
     with urllib.request.urlopen(req) as res:
         response = res.read()
-    post_result = json.loads(response)     
+    post_result = json.loads(response)    
+
 def turn_around3(x,y): #for 90-180
     y = abs(y)
     angle = math.degrees(math.atan(y/x))
@@ -176,6 +182,7 @@ def turn_around3(x,y): #for 90-180
     with urllib.request.urlopen(req) as res:
         response = res.read()
     post_result = json.loads(response)   
+
 def turn_around4(x,y): #for -0--90
     y = abs(y)
     angle = math.degrees(math.atan(x/y))
@@ -192,7 +199,8 @@ def turn_around4(x,y): #for -0--90
     
     with urllib.request.urlopen(req) as res:
         response = res.read()
-    post_result = json.loads(response)   
+    post_result = json.loads(response)  
+
 def turn_around5(x,y): #for -90-180
     y = abs(y)
     angle = math.degrees(math.atan(y/x))
@@ -223,6 +231,7 @@ def move_forward():
     with urllib.request.urlopen(req) as res:
         response = res.read()
     post_result = json.loads(response)
+
 def move_backwards():
     print("move backwards")
     latestcommand.set("Move Backwards")
@@ -235,6 +244,7 @@ def move_backwards():
     with urllib.request.urlopen(req) as res:
         response = res.read()
     post_result = json.loads(response)
+
 def move_left():
     print("move to left")
     latestcommand.set("Move to Left")
@@ -247,6 +257,7 @@ def move_left():
     with urllib.request.urlopen(req) as res:
         response = res.read()
     post_result = json.loads(response)
+
 def move_right():
     print("move to right")
     latestcommand.set("Move to Right")
@@ -259,6 +270,7 @@ def move_right():
     with urllib.request.urlopen(req) as res:
         response = res.read()
     post_result = json.loads(response)
+
 def turn_around():
     angle=scale.get() #get most recent angle
 
@@ -283,6 +295,7 @@ def turn_around():
     with urllib.request.urlopen(req) as res:
         response = res.read()
     post_result = json.loads(response)
+
 def bark():
     print("bark")
     latestcommand.set("Bark")
@@ -296,6 +309,7 @@ def bark():
     with urllib.request.urlopen(req) as res:
         response = res.read()
     post_result = json.loads(response)
+
 def pee():
     print("pee")
     latestcommand.set("Pee")
@@ -309,23 +323,61 @@ def pee():
     with urllib.request.urlopen(req) as res:
         response = res.read()
     post_result = json.loads(response)
+
+Yelevation=0
 def look_up():
+    global Yelevation
+
+    if Yelevation==40:
+        Yelevation=0
+    else:
+        Yelevation +=10
+
     print("look up")
-    latestcommand.set("Look up")
+    latestcommand.set("Look up. Current elevation="+str(Yelevation))
+
     api_name="move_head"
-    data = '{"arguments":' '{"Azimuth":0,"Elevation":40, "Velocity":50}''}'
-    
+    data = '{"arguments":' '{"Azimuth":0,"Elevation":' + str(Yelevation) + ', "Velocity":50}''}'
+
     post_url = BASE_PATH + '/devices/' + DEVICE_ID + '/capabilities/'+ api_name + '/execute'
     req = urllib.request.Request(post_url, data.encode(), headers=headers, method='POST')
-    
+
     with urllib.request.urlopen(req) as res:
         response = res.read()
     post_result = json.loads(response)
 def look_down():
+    global Yelevation
+
+    if Yelevation==-40:
+        Yelevation=0
+    else:
+        Yelevation -=10
+
     print("look down")
-    latestcommand.set("Look down")
+    latestcommand.set("Look down. Current elevation="+str(Yelevation))
     api_name="move_head"
-    data = '{"arguments":' '{"Azimuth":0,"Elevation":-40, "Velocity":50}''}'
+    data = '{"arguments":' '{"Azimuth":0,"Elevation":' + str(Yelevation) + ', "Velocity":50}''}'
+
+    post_url = BASE_PATH + '/devices/' + DEVICE_ID + '/capabilities/'+ api_name + '/execute'
+    req = urllib.request.Request(post_url, data.encode(), headers=headers, method='POST')
+
+    with urllib.request.urlopen(req) as res:
+        response = res.read()
+    post_result = json.loads(response)
+
+Xazimuth=0
+def look_right():
+    global Xazimuth
+
+    if Xazimuth==80:
+        Xazimuth=0
+    else:
+        Xazimuth +=20
+
+    print("look right")
+    latestcommand.set("Look right. Current azimuth="+str(Xazimuth))
+    api_name="move_head"
+    data = '{"arguments":' '{"Azimuth":' + str(Xazimuth) + ',"Elevation":0, "Velocity":50}''}'
     
     post_url = BASE_PATH + '/devices/' + DEVICE_ID + '/capabilities/'+ api_name + '/execute'
     req = urllib.request.Request(post_url, data.encode(), headers=headers, method='POST')
@@ -333,6 +385,27 @@ def look_down():
     with urllib.request.urlopen(req) as res:
         response = res.read()
     post_result = json.loads(response)
+
+def look_left():
+    global Xazimuth
+
+    if Xazimuth==-80:
+        Xazimuth=0
+    else:
+        Xazimuth -=20
+
+    print("look left")
+    latestcommand.set("Look left. Current azimuth="+str(Xazimuth))
+    api_name="move_head"
+    data = '{"arguments":' '{"Azimuth":' + str(Xazimuth) + ',"Elevation":0, "Velocity":50}''}'
+    
+    post_url = BASE_PATH + '/devices/' + DEVICE_ID + '/capabilities/'+ api_name + '/execute'
+    req = urllib.request.Request(post_url, data.encode(), headers=headers, method='POST')
+    
+    with urllib.request.urlopen(req) as res:
+        response = res.read()
+    post_result = json.loads(response)
+
 
 data=''
 def convert():
@@ -346,6 +419,7 @@ def convert():
         button_switch["text"]="ON"
         data='{"arguments":{"ModeName":"NORMAL"}}'
         return data
+
 def set_mode():
     print("Setting mode...")
 
@@ -393,13 +467,14 @@ def convert2():
         print("Controller mode disabled")
         latestcommand.set("Controller mode disabled")
         set_controller(0)
+
 def set_controller(state):
     global dead
     if state==1: #controller on
         joy = XboxController()
 
         #disabling all gui buttons
-        for x in (button_w, button_s, button_a,button_d,button_b,button_p,button_mode,scale,button_up,button_down):
+        for x in (button_w, button_s, button_a,button_d,button_b,button_p,button_mode,scale,button_up,button_down,button_right,button_left):
             x.config(state = 'disabled')
 
         #disabling the keyboard
@@ -412,13 +487,15 @@ def set_controller(state):
         root.unbind('p')
         root.unbind('<Up>')
         root.unbind('<Down>')
+        root.unbind('<Right>')
+        root.unbind('<Left>')
         scale.unbind("<ButtonRelease-1>")
 
     elif state==0: #controller off
         dead=True 
 
         #enabling all gui buttons
-        for x in (button_w, button_s, button_a,button_d,button_b,button_p,button_mode,scale,button_up,button_down):
+        for x in (button_w, button_s, button_a,button_d,button_b,button_p,button_mode,scale,button_up,button_down,button_right,button_left):
             x.config(state = 'normal')
 
         #enabling the keyboard
@@ -430,6 +507,8 @@ def set_controller(state):
         root.bind('p', lambda event: pee())
         root.bind('<Up>', lambda event: look_up())
         root.bind('<Down>', lambda event: look_down())
+        root.bind('<Right>', lambda event: look_right())
+        root.bind('<Left>', lambda event: look_left())
         scale.bind("<ButtonRelease-1>",lambda event: turn_around())
 
 #virtual control buttons
@@ -441,6 +520,8 @@ button_b = Button(root, text="Bark", padx=30, pady=20, command=bark,width=1,heig
 button_p = Button(root, text="Pee", padx=30, pady=20, command=pee,width=1,height=1)
 button_up = Button(root, text="Look ⬆️", padx=30, pady=20, command=look_up,width=1,height=1)
 button_down = Button(root, text="Look ⬇️", padx=30, pady=20, command=look_down, width=1,height=1)
+button_right = Button(root, text="Look ➡️", padx=30, pady=20, command=look_right, width=1,height=1)
+button_left = Button(root, text="Look ⬅️", padx=30, pady=20, command=look_left, width=1,height=1)
 button_switch = Button(root, text="Mode", padx=10, pady=10)
 #mode display
 button_mode=Button(root,text="Developer Mode",state=DISABLED)
@@ -464,6 +545,8 @@ root.bind('b', lambda event: bark())
 root.bind('p', lambda event: pee())
 root.bind('<Up>', lambda event: look_up())
 root.bind('<Down>', lambda event: look_down())
+root.bind('<Right>', lambda event: look_right())
+root.bind('<Left>', lambda event: look_left())
 scale.bind("<ButtonRelease-1>",lambda event: turn_around())
 
 #Position of buttons
@@ -477,8 +560,10 @@ button_controller.grid(row=4,column=3)
 button_switch2.grid(row=4,column=4)
 button_b.grid(row=3, column=4)
 button_p.grid(row=2, column=4)
-button_up.grid(row=2, column=6)
-button_down.grid(row=3, column=6)
+button_up.grid(row=2, column=8)
+button_down.grid(row=3, column=8)
+button_right.grid(row=3, column=9)
+button_left.grid(row=3, column=7)
 scale.grid(row=3,column=5)
 
 #turn round text
