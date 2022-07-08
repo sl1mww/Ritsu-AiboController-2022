@@ -94,7 +94,7 @@ class XboxController(object):
                     self.Back = event.state
                 elif event.code == 'BTN_START':
                     self.Start = event.state
-                elif event.code == 'ABS_0X':
+                elif event.code == 'ABS_HAT0X':
                     self.DPadX = event.state
                 elif event.code == 'ABS_HAT0Y':
                     self.DPadY = event.state
@@ -391,7 +391,7 @@ def set_controller(state):
         joy = XboxController()
 
         #disabling all gui buttons
-        for x in (button_w, button_s, button_a,button_d,button_b,button_p,button_mode,scale):
+        for x in (button_w, button_s, button_a,button_d,button_b,button_p,button_mode,scale,button_up,button_down):
             x.config(state = 'disabled')
 
         #disabling the keyboard
@@ -401,6 +401,8 @@ def set_controller(state):
         root.unbind('d')
         root.unbind('b')
         root.unbind('p')
+        root.unbind('<Up>')
+        root.unbind('<Down>')
         scale.unbind("<ButtonRelease-1>")
           
     elif state==0: #controller off
@@ -417,6 +419,8 @@ def set_controller(state):
         root.bind('d', lambda event: move_right())
         root.bind('b', lambda event: bark())
         root.bind('p', lambda event: pee())
+        root.bind('<Up>', lambda event: look_up())
+        root.bind('<Down>', lambda event: look_down()) 
         scale.bind("<ButtonRelease-1>",lambda event: turn_around())
 
 root =Tk()
