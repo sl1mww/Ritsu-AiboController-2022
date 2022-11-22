@@ -1,4 +1,4 @@
-# Sony-Aibo-ERS-1000-Controller
+# Ritsu-AiboController-2022
 
 Hello world!
 This is a collaborative project between sl1mww (Shaun Lim W.W.) and Ian Suzuki for our university Project-Based-Learning (PBL) class.
