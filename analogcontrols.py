@@ -1,3 +1,4 @@
+#analog controls for the gamepad (xbox)
 from inputs import get_gamepad
 import math
 import threading

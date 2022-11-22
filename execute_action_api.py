@@ -1,23 +1,15 @@
+#running basic actions
 import json
 import sys
 import time
 import urllib.request
 
 headers = {
-'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjExMSJ9.eyJzdWIiOiJlN\
-jkyOWJjYy05NDg1LTRlNjItYWVhYy1jZGYzMDFiMjg3OTMiLCJleHAiOjE2NTgyMTQwNDIsImlz\
-cyI6Imh0dHBzOi8vcHVibGljLmFwaS5haWJvLmNvbSIsImF1ZCI6IjQ1LjU0NzA2MTA2NzUyMDg\
-xOTIiLCJqdGkiOiJhNDA2YmRjMS02Y2JlLTRmM2ItYWMyMC00NzZhMWQ0M2E3MmMiLCJpYXQiOj\
-E2NTA0MzgwNDJ9.Fam_ltjdrPgRrUEpuHD6tjUL7AxbcgDhkxLJru_rhmbhrg02hwVG2gizpucv\
-BbcX6GjT8yeLF5gZFrihLCWP3W-7aNUWT_Nlwv96_UuXaedfDelfeW77M23pbo1K_GJgeUifs0O\
-zaPS83Hinu8gVgZL3f2oM5DjaAdwL4AqcFjxPmnfn-05OLO53k8-ui-qdh1vfBBWesfVHbsy2I9\
-LMTGxtanEnJAIyHNFwKUco5WlNp5Y1aSnZVdoe9RStvmDSI-XLXUrRl1UTwt40XXns5NGPtX4xs\
-n_UXmMKQCjPXIgLIMEENHbpXe1hvfYRs8W58nP_wlA2weHUE2rQyqEEAQ',
-}
-
-BASE_PATH = 'https://public.api.aibo.com/v1'
-DEVICE_ID = "010ed9e5-bc49-40f7-9e42-e7e2d229e305"
-#TIME_OUT_LIMIT = 10
+'Authorization': 'Bearer ', # insert access token after "Bearer " 
+} 
+BASE_PATH = 'https://public.api.aibo.com/v1' 
+DEVICE_ID = "" #input device ID for particular aibo
+TIME_OUT_LIMIT = 5 #time limit for changing from developer-normal (vice-versa)
 
 def do_action(api_name, arguments):
     post_url = BASE_PATH + '/devices/' + DEVICE_ID + '/capabilities/' + api_name + '/execute'
